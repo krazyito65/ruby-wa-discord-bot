@@ -1,5 +1,5 @@
 # ruby-wa-discord-bot
-weak auras discord bot re-written in ruby.
+WeakAuras discord bot re-written in ruby.
 
 Basic set up:
 
@@ -13,4 +13,13 @@ rbenv install 2.6.3
 rbenv global 2.6.3
 echo "gem: --no-document" > ~/.gemrc
 gem install bundler
-bundle install```
+bundle install
+```
+
+Once you have all that installed, you need to create a file called `token.yml`. This file will contain your development and/or live tokens for use with the bot. Simply format it as such:
+
+```yml
+dev_token: your_testing_token
+live_loken: your_main_token
+```
+While obvioulsy replacing the data with your actual tokens.
