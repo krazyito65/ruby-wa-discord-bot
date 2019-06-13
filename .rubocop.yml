@@ -1,0 +1,13 @@
+inherit_from: .rubocop_todo.yml
+
+# ruby Version
+AllCops:
+  TargetRubyVersion: 2.6.3
+
+# Force LF ("\n")
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+# I like to explicitly state 'return'
+Style/RedundantReturn:
+  Enabled: false
