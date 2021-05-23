@@ -25,5 +25,8 @@ live_loken: your_main_token
 While obvioulsy replacing the data with your actual tokens.
 
 Currently using `supervisor` to keep the program running.
-supervisord
-supervisorctl restart ruby_weak_auras
+`supervisord`
+`supervisorctl restart ruby_weak_auras`
+
+
+Old depreacted bot: https://github.com/krazyito65/wa-discord-bot
