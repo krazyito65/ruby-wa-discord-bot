@@ -26,14 +26,14 @@ class Macro
 
   def update_html
     @server_macros.each do |macro_name, macro_text|
-      @macro_html += @event.bot.prefix + macro_name + ": " + macro_text +"\n==================================================\n"
+      @macro_html += "#{@event.bot.prefix}#{macro_name}: #{macro_text}\n==================================================\n"
     end
-    @macro_html = @macro_html.gsub(/</, "&lt;");
-		@macro_html = @macro_html.gsub(/>/, "&gt;");
+    @macro_html = @macro_html.gsub(/</, '&lt;')
+    @macro_html = @macro_html.gsub(/>/, '&gt;')
 
-    @macro_html = "<head><meta charset=\"utf-8\"/></head><pre>" + @macro_html + "</pre>"
+    @macro_html = "<head><meta charset=\"utf-8\"/></head><pre>#{@macro_html}</pre>"
 
-    File.open("data/#{@event.server.id}","w") do |f|
+    File.open("data/#{@event.server.id}", 'w') do |f|
       f.write(@macro_html)
     end
   end
@@ -47,7 +47,7 @@ class Macro
 
     # check if the user has manage message priv
     unless @event.author.can_manage_messages?
-      @event.respond 'You do not have privileges to edit macros.' 
+      @event.respond 'You do not have privileges to edit macros.'
       return ''
     end
 
@@ -62,19 +62,19 @@ class Macro
       @event.respond "Invalid action: #{@action}"
       @event.respond 'Usage: !macro `[add/remove|delete/edit macro_name macro_text]`'
       logger.info(format('[MACRO] Invalid macro command: \'%<cmd>s\' in: %<channel>s @ %<discord>s by: %<user>s',
-        cmd: @event.text,
-        channel: @event.channel.name,
-        discord: @event.server.name,
-        user: @event.author.distinct))
+                         cmd: @event.text,
+                         channel: @event.channel.name,
+                         discord: @event.server.name,
+                         user: @event.author.distinct))
     end
   end
 
   def add(name, text)
     logger.info(format('[MACRO] Running ADD command:\'%<cmd>s \' in: %<channel>s @ %<discord>s by: %<user>s',
-      cmd: @event.text,
-      channel: @event.channel.name,
-      discord: @event.server.name,
-      user: @event.author.distinct))
+                       cmd: @event.text,
+                       channel: @event.channel.name,
+                       discord: @event.server.name,
+                       user: @event.author.distinct))
 
     unless @server_macros[name].nil?
       @event.respond "Macro `#{name}` already exists. Please use the `edit` command."
@@ -86,12 +86,12 @@ class Macro
     @event.respond "Macro `#{name}` has been added successfully!"
   end
 
-  def remove(name, text)
+  def remove(name, _text)
     logger.info(format('[MACRO] Running REMOVE command:\'%<cmd>s \' in: %<channel>s @ %<discord>s by: %<user>s',
-      cmd: @event.text,
-      channel: @event.channel.name,
-      discord: @event.server.name,
-      user: @event.author.distinct))
+                       cmd: @event.text,
+                       channel: @event.channel.name,
+                       discord: @event.server.name,
+                       user: @event.author.distinct))
 
     if @server_macros[name].nil?
       @event.respond "Macro `#{name}` does not exist. Please check your spelling/case sensitivity."
@@ -105,11 +105,11 @@ class Macro
 
   def edit(name, text)
     logger.info(format('[MACRO] Running EDIT command:\'%<cmd>s \' in: %<channel>s @ %<discord>s by: %<user>s',
-      cmd: @event.text,
-      channel: @event.channel.name,
-      discord: @event.server.name,
-      user: @event.author.distinct))
-      
+                       cmd: @event.text,
+                       channel: @event.channel.name,
+                       discord: @event.server.name,
+                       user: @event.author.distinct))
+
     if @server_macros[name].nil?
       @event.respond "Macro `#{name}` does not exist. Please check your spelling/case sensitivity."
       return ''
@@ -121,10 +121,9 @@ class Macro
   end
 
   def write_macro_to_file
-    File.open("data/macros.json","w") do |f|
+    File.open('data/macros.json', 'w') do |f|
       f.write(JSON.pretty_generate(@all_macros))
     end
     update_html
   end
-
 end

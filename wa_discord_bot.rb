@@ -69,8 +69,7 @@ end
 
 # quote command
 bot.command(:quote, description: 'add a quote for the server, or post a random quote.',
-  usage: 'qutoe [add/remove|delete/edit quote_text]') do |event|
-  
+                    usage: 'qutoe [add/remove|delete/edit quote_text]') do |event|
   Quote.new(event).random_quote
 end
 
@@ -83,40 +82,38 @@ bot.command(:macro, aliases: [:macros],
     break
   end
 
-
   if args.length.eql?(2) && args[0].match(/remove|delete/)
     Macro.new(event, args[0], args[1]).parse
     break
   end
 
-  if args.length < 3 
+  if args.length < 3
     event.respond 'Not enough parameters'
     event.respond 'Usage: !macro `[add/remove/edit macro_name macro_text]`'
     logger.info(format('[MACRO] Not enough paramters command: \'%<cmd>s\' in: %<channel>s @ %<discord>s by: %<user>s',
-      cmd: event.text,
-      channel: event.channel.name,
-      discord: event.server.name,
-      user: event.author.distinct))
+                       cmd: event.text,
+                       channel: event.channel.name,
+                       discord: event.server.name,
+                       user: event.author.distinct))
     break
   end
 
   action = args.shift
-  macro_name = args.shift 
+  macro_name = args.shift
   macro_text = args.join(' ')
-
 
   Macro.new(event, action, macro_name, macro_text).parse unless args.empty?
 end
-
 
 # macro execution
 bot.message(start_with: bot.prefix) do |event|
   msg = event.text
   msg[0] = '' # remove the first character (the prefix)
   command = /^\w+/.match(msg).to_s # grab the first word from the text, which is the command
-  all_commands = bot.commands.keys.map! &:to_s # convert the symbols to strings to compare with
+  all_commands = bot.commands.keys.map!(&:to_s) # convert the symbols to strings to compare with
 
-  Parser.new(event, command).parse_macro unless all_commands.include?(command) # fuck off if we're looking for a builtin command
+  # fuck off if we're looking for a builtin command
+  Parser.new(event, command).parse_macro unless all_commands.include?(command)
 end
 
 bot.run

@@ -18,14 +18,14 @@ class Quote
 
   def update_html
     @server_quotes.each do |quote|
-      @quote_html += quote +"\n==================================================\n"
+      @quote_html += "#{quote}\n==================================================\n"
     end
-    @quote_html = @quote_html.gsub(/</, "&lt;");
-		@quote_html = @quote_html.gsub(/>/, "&gt;");
+    @quote_html = @quote_html.gsub(/</, '&lt;')
+    @quote_html = @quote_html.gsub(/>/, '&gt;')
 
-    @quote_html = "<head><meta charset=\"utf-8\"/></head><pre>" + @quote_html + "</pre>"
+    @quote_html = "<head><meta charset=\"utf-8\"/></head><pre>#{@quote_html}</pre>"
 
-    File.open("data/quotes/#{@event.server.id}","w") do |f|
+    File.open("data/quotes/#{@event.server.id}", 'w') do |f|
       f.write(@quote_html)
     end
   end

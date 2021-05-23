@@ -32,9 +32,9 @@ class Parser
     @event.respond @all_macros[@event.server.id.to_s][command]
 
     logger.info(format('[MACRO] Command: \'%<cmd>s\' was executed by: %<user>s in %<channel>s @ %<discord>s',
-      cmd: @command,
-      user: @event.author.distinct,
-      channel: @event.channel.name,
-      discord: @event.server.name))
+                       cmd: @command,
+                       user: @event.author.distinct,
+                       channel: @event.channel.name,
+                       discord: @event.server.name))
   end
 end
