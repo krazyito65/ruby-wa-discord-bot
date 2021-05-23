@@ -12,6 +12,8 @@ class Ping
                        channel: @event.channel.name,
                        discord: @event.server.name,
                        user: @event.author.distinct))
-    @event.respond "Pong! Bot appears to be working.\n\tInvite link: <#{@event.bot.invite_url}>"
+    @event.respond "Pong! Bot appears to be working.
+    \tInvite link: <#{@event.bot.invite_url}>
+    \tGithub: <https://github.com/krazyito65/ruby-wa-discord-bot>"
   end
 end
