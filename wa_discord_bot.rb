@@ -10,6 +10,7 @@ require_relative 'helpers/logging'
 require_relative 'commands/ping'
 require_relative 'commands/macro'
 require_relative 'commands/quote'
+require_relative 'commands/role'
 
 require_relative 'helpers/macro_parser'
 include Logging
@@ -59,6 +60,29 @@ bot.command(:ping, description: 'Lets you know if the bot is working') do |event
   Ping.new(event).pong
 end
 
+# role command
+bot.command(:role, aliases: [:roles],
+                   description: 'Gives class, hex or alpha roles',
+                   usage: 'role [discord_role/remove/hex] [hex_code]') do |event, *args|
+  if args.empty?
+    Role.new(event).help
+    break
+  end
+
+  if args[0].downcase.eql?('hex')
+    Role.new(event).hex(args[1])
+    break
+  end
+
+  if args[0].downcase.eql?('remove')
+    _r = args.shift
+    Role.new(event).remove_role(args.join(' '))
+    break
+  end
+
+  Role.new(event).parse(args.join(' '))
+end
+
 # add logging for the help command
 bot.message(start_with: '!help') do |event|
   logger.info(format('[HELP] Responding to a help command in: %<channel>s @ %<discord>s by: %<user>s',
@@ -75,7 +99,7 @@ end
 
 # macro command
 bot.command(:macro, aliases: [:macros],
-                    description: 'Can dispaly available macros on the server, or add/delete/edit them.',
+                    description: 'Can display available macros on the server, or add/delete/edit them.',
                     usage: 'macro [add/remove|delete/edit macro_name macro_text]') do |event, *args|
   if args.empty?
     Macro.new(event).help
@@ -110,7 +134,7 @@ bot.message(start_with: bot.prefix) do |event|
   msg = event.text
   msg[0] = '' # remove the first character (the prefix)
   command = /^\w+/.match(msg).to_s # grab the first word from the text, which is the command
-  all_commands = bot.commands.keys.map!(&:to_s) # convert the symbols to strings to compare with
+  all_commands = bot.commands.keys.map(&:to_s) # convert the symbols to strings to compare with
 
   # fuck off if we're looking for a builtin command
   Parser.new(event, command).parse_macro unless all_commands.include?(command)

@@ -29,6 +29,8 @@ class Parser
   end
 
   def send_macro_text(command)
+    return if @all_macros[@event.server.id.to_s][command].nil? # dont do anything if theres no macro.
+
     @event.respond @all_macros[@event.server.id.to_s][command]
 
     logger.info(format('[MACRO] Command: \'%<cmd>s\' was executed by: %<user>s in %<channel>s @ %<discord>s',
