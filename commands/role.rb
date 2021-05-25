@@ -45,7 +45,8 @@ class Role
       add_role(@server_roles[hex], hex)
     else
       color = Discordrb::ColourRGB.new(hex)
-      new_role = @event.server.create_role(name: hex, colour: color, reason: "created by #{@event.author.distinct}")
+      # Discordrb::Permissions.new [:read_messages, :connect, :speak, :read_message_history]
+      new_role = @event.server.create_role(name: hex, colour: color, permissions: 3_212_288, reason: "created by #{@event.author.distinct}")
       new_role.sort_above(@event.server.roles.find { |r| r.position == @event.server.bot.highest_role.position - 1 })
       add_role(new_role.id, hex)
     end
@@ -73,8 +74,34 @@ class Role
     @event.respond 'While a valid role.. the server does not seem to have it. Ping a Mod.'
   end
 
-  def remove_role(_role)
-    @event.respond 'remove role command still WIP'
+  def remove_role(role)
+    if @server_roles.keys.grep(/^#{role}$/i)[0].nil?
+      logger.info(format('[ROLE] role %<role>s not found on %<user>s in %<channel>s @ %<discord>s',
+                         role: role,
+                         user: @event.author.distinct,
+                         channel: @event.channel.name,
+                         discord: @event.server.name))
+      @event.respond "Role: `#{role}` not found on #{@event.author.mention}"
+      return
+    end
+
+    role_to_remove = @server_roles.keys.grep(/^#{role}$/i)[0]
+    begin
+      @event.author.remove_role(@server_roles[role_to_remove])
+    rescue Discordrb::Errors::NoPermission
+      @event.respond 'The bot does not have permisson to add the role.'
+      logger.warn(format('[ROLE] Bot does not have permissons to remove role %<role>s in: %<channel>s @ %<discord>s',
+                         role: role_to_remove,
+                         channel: @event.channel.name,
+                         discord: @event.server.name))
+      return
+    end
+    logger.info(format('[ROLE] Removed role %<role>s from %<user>s in %<channel>s @ %<discord>s',
+                       role: role_to_remove,
+                       user: @event.author.distinct,
+                       channel: @event.channel.name,
+                       discord: @event.server.name))
+    @event.respond "Removed role: `#{role_to_remove}` to #{@event.author.mention}"
   end
 
   def help
