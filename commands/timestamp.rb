@@ -31,7 +31,7 @@ class Timestamp
     embed_time = time_input.utc.strftime('%Y-%m-%dT%H:%M:%S.%NZ') # YYYY-MM-DDTHH:MM:SS.NNNZ
 
     embed_hash = { embeds: [{ description: "#{input} from #{@event.author.distinct}", timestamp: embed_time }] }
-    embed = Discordrb::Webhooks::Embed.new(description: "#{input}", timestamp: time_input)
+    embed = Discordrb::Webhooks::Embed.new(description: input.to_s, timestamp: time_input)
     # embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: 'meew0', url: 'https://github.com/meew0', icon_url: 'https://avatars2.githubusercontent.com/u/3662915?v=3&s=466')
 
     # initialize(title: nil, description: nil, url: nil, timestamp: nil, colour: nil, color: nil, footer: nil, image: nil, thumbnail: nil, video: nil, provider: nil, author: nil, fields: [])
