@@ -5,7 +5,7 @@ class Role
   include Logging
   def initialize(event)
     @event = event
-    @valid_roles = %w[Druid Death\ Knight Demon\ Hunter Hunter Mage Monk Paladin Priest Rogue Warlock Warrior WAalpha]
+    @valid_roles = %w[Druid Death\ Knight Demon\ Hunter Hunter Mage Monk Paladin Priest Rogue Shaman Warlock Warrior WAalpha]
     @server_roles = @event.server.roles.map { |r| [r.name, r.id] }.to_h
   end
 

@@ -11,6 +11,7 @@ require_relative 'commands/ping'
 require_relative 'commands/macro'
 require_relative 'commands/quote'
 require_relative 'commands/role'
+require_relative 'commands/timestamp'
 
 require_relative 'helpers/macro_parser'
 include Logging
@@ -32,6 +33,7 @@ end.parse!
 
 # load the token yml file.
 config = YAML.safe_load(File.open('token.yml'))
+google_api_key = config['google_api_key']
 
 # set the logger format of our logs.
 logger.formatter = Logger::Formatter.new
@@ -58,6 +60,12 @@ bot = Discordrb::Commands::CommandBot.new token: token, prefix: prefix, ignore_b
 # ping command
 bot.command(:ping, description: 'Lets you know if the bot is working') do |event|
   Ping.new(event).pong
+end
+
+# timestamp command
+bot.command(:time, aliases: [:timestamp],
+                   description: 'Will provide an embed with your local timestamp based on given time.') do |event, *args|
+  Timestamp.new(event, google_api_key).post_embed(args.join(' '))
 end
 
 # role command
@@ -131,13 +139,12 @@ end
 
 # macro execution
 bot.message(start_with: bot.prefix) do |event|
-  msg = event.text
+  msg = event.text.split[0]
   msg[0] = '' # remove the first character (the prefix)
-  command = /^\w+/.match(msg).to_s # grab the first word from the text, which is the command
   all_commands = bot.commands.keys.map(&:to_s) # convert the symbols to strings to compare with
 
   # fuck off if we're looking for a builtin command
-  Parser.new(event, command).parse_macro unless all_commands.include?(command)
+  Parser.new(event, msg).parse_macro unless all_commands.include?(msg)
 end
 
 bot.run
