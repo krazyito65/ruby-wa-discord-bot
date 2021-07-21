@@ -46,7 +46,7 @@ class Macro
                        user: @event.author.distinct))
 
     # check if the user has manage message priv
-    unless @event.author.can_manage_messages?
+    unless @event.author.can_view_server_insights?
       @event.respond 'You do not have privileges to edit macros.'
       return ''
     end

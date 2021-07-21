@@ -108,21 +108,23 @@ end
 # macro command
 bot.command(:macro, aliases: [:macros],
                     description: 'Can display available macros on the server, or add/delete/edit them.',
-                    usage: 'macro [add/remove|delete/edit macro_name macro_text]') do |event, *args|
-  if args.empty?
+                    usage: 'macro [add/remove|delete/edit macro_name macro_text]') do |event, action, macro_name|
+  if action.nil?
     Macro.new(event).help
     break
   end
 
-  if args.length.eql?(2) && args[0].match(/remove|delete/)
-    Macro.new(event, args[0], args[1]).parse
+  if action.match(/remove|delete/)
+    Macro.new(event, action, macro_name).parse
     break
   end
+
+  args = event.message.content.split(/\s+/, 4)
 
   if args.length < 3
     event.respond 'Not enough parameters'
     event.respond 'Usage: !macro `[add/remove/edit macro_name macro_text]`'
-    logger.info(format('[MACRO] Not enough paramters command: \'%<cmd>s\' in: %<channel>s @ %<discord>s by: %<user>s',
+    logger.info(format('[MACRO] Not enough parameters command: \'%<cmd>s\' in: %<channel>s @ %<discord>s by: %<user>s',
                        cmd: event.text,
                        channel: event.channel.name,
                        discord: event.server.name,
@@ -130,9 +132,7 @@ bot.command(:macro, aliases: [:macros],
     break
   end
 
-  action = args.shift
-  macro_name = args.shift
-  macro_text = args.join(' ')
+  macro_text = args.last
 
   Macro.new(event, action, macro_name, macro_text).parse unless args.empty?
 end
