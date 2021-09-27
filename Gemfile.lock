@@ -17,8 +17,6 @@ GEM
     e2mmap (0.1.0)
     event_emitter (0.2.6)
     ffi (1.15.1)
-    foreverb (0.3.3)
-      thor (>= 0.15.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -30,10 +28,10 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0225)
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.6.1)
     netrc (0.11.0)
-    nokogiri (1.11.5)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     opus-ruby (1.0.1)
       ffi
@@ -94,7 +92,6 @@ PLATFORMS
 
 DEPENDENCIES
   discordrb
-  foreverb
   rubocop
   solargraph
 
