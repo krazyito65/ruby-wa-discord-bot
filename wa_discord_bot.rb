@@ -101,7 +101,7 @@ end
 
 # quote command
 bot.command(:quote, description: 'add a quote for the server, or post a random quote.',
-                    usage: 'qutoe [add/remove|delete/edit quote_text]') do |event|
+                    usage: 'qutoe [add/remove|delete/edit/list quote_text]') do |event|
   Quote.new(event).random_quote
 end
 

@@ -25,16 +25,18 @@ class Macro
   end
 
   def update_html
-    @server_macros.each do |macro_name, macro_text|
-      @macro_html += "#{@event.bot.prefix}#{macro_name}: #{macro_text}\n==================================================\n"
-    end
-    @macro_html = @macro_html.gsub(/</, '&lt;')
-    @macro_html = @macro_html.gsub(/>/, '&gt;')
+    @macro_html = ''
+    unless @server_macros.nil?
+      @server_macros.each do |macro_name, macro_text|
+        @macro_html += "#{@event.bot.prefix}#{macro_name}: #{macro_text}\n==================================================\n"
+      end
+      @macro_html = @macro_html.gsub(/</, '&lt;')
+      @macro_html = @macro_html.gsub(/>/, '&gt;')
+      @macro_html = "<head><meta charset=\"utf-8\"/></head><pre>#{@macro_html}</pre>"
 
-    @macro_html = "<head><meta charset=\"utf-8\"/></head><pre>#{@macro_html}</pre>"
-
-    File.open("data/#{@event.server.id}", 'w') do |f|
-      f.write(@macro_html)
+      File.open("data/#{@event.server.id}", 'w') do |f|
+        f.write(@macro_html)
+      end
     end
   end
 
@@ -44,6 +46,14 @@ class Macro
                        channel: @event.channel.name,
                        discord: @event.server.name,
                        user: @event.author.distinct))
+
+    logger.info("server macros before: %s" % @all_macros[@event.server.id.to_s])
+    if @server_macros.nil? 
+      @all_macros[@event.server.id.to_s] = {}
+      @server_macros = @all_macros[@event.server.id.to_s]
+      write_macro_to_file
+    end
+    logger.info("server macros after: %s" % @all_macros[@event.server.id.to_s])
 
     # check if the user has manage message priv
     unless @event.author.can_view_server_insights?
