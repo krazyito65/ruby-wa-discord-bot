@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # basic irb script to get methods from bot
+# load './irb-help.rb'
 
 require 'discordrb'
 require 'yaml'

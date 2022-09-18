@@ -36,6 +36,7 @@ config = YAML.safe_load(File.open('token.yml'))
 google_api_key = config['google_api_key']
 
 # set the logger format of our logs.
+$stdout.sync = true # unbuffer the logs.
 logger.formatter = Logger::Formatter.new
 logger.formatter = proc do |severity, datetime, _, msg|
   "#{datetime} - #{severity}: #{msg.dump}\n"
@@ -56,6 +57,8 @@ end
 
 # bot = Discordrb::Bot.new token: token, prefix: '!'
 bot = Discordrb::Commands::CommandBot.new token: token, prefix: prefix, ignore_bots: true
+
+puts "Discordrb::VERSION = %s" % Discordrb::VERSION
 
 # ping command
 bot.command(:ping, description: 'Lets you know if the bot is working') do |event|
@@ -139,6 +142,7 @@ end
 
 # macro execution
 bot.message(start_with: bot.prefix) do |event|
+  logger.debug('we got a msg with a prefix: %s' % [event])
   msg = event.text.split[0]
   msg[0] = '' # remove the first character (the prefix)
   all_commands = bot.commands.keys.map(&:to_s) # convert the symbols to strings to compare with

@@ -3,6 +3,7 @@ inherit_from: .rubocop_todo.yml
 # ruby Version
 AllCops:
   TargetRubyVersion: 3.0.1
+  NewCops: disable
 
 # Force LF ("\n")
 Layout/EndOfLine:
