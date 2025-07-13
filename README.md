@@ -9,8 +9,8 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build`
 source ~/.bashrc
-rbenv install 3.0.1
-rbenv local 3.0.1
+rbenv install 3.4.4 --verbose
+rbenv local 3.4.4
 echo "gem: --no-document" > ~/.gemrc
 gem install bundler
 bundle install
