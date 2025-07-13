@@ -24,9 +24,42 @@ live_loken: your_main_token
 ```
 While obvioulsy replacing the data with your actual tokens.
 
+to run the bot you can do:
+```
+ruby wa_discord_bot.rb # dev token
+ruby wa_discord_bot.rb -p # live/prod token
+```
+
 Currently using `supervisor` to keep the program running.
-`supervisord`
-`supervisorctl restart ruby_weak_auras`
+
+add this to the bottom of your `/etc/supervisord.conf`
+
+You should update the username/paths in this config to your specific machine.
+```ini
+[program:ruby_weak_auras]
+command=/home/wabot/.rbenv/shims/bundle exec ruby /home/wabot/ruby-wa-discord-bot/wa_discord_bot.rb -p
+stdout_logfile=/home/wabot/ruby-wa-discord-bot/logs/out.log
+autorestart=true
+directory=/home/wabot/ruby-wa-discord-bot
+stdout_logfile_maxbytes=100MB
+stdout_logfile_backups=20
+stdout_capture_maxbytes=0
+stdout_events_enabled=false
+stderr_logfile=/home/wabot/ruby-wa-discord-bot/logs/err.log
+stderr_logfile_maxbytes=100MB
+stderr_logfile_backups=20
+stderr_capture_maxbytes=0
+buffer_size=0 ; event buffer queue size (default 10)
+; run this to update:
+; supervisorctl
+; reread
+```
+
+you should then run `supervisorctl` then in the prompt, `reread`
+```
+supervisord
+supervisorctl restart ruby_weak_auras
+```
 
 
 Old depreacted bot: https://github.com/krazyito65/wa-discord-bot
